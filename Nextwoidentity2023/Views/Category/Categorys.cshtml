@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Nextwoidentity2023.Models.Category>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+
+@{
+    ViewData["Title"] = "Categorys";
+}
+
+<h1>Categorys</h1>
+
+@if (signInManager.IsSignedIn(User))
+{
+    if (User.IsInRole("Admin"))
+    {
+        <p>
+            <a asp-action="CreateCategory" class="btn btn-primary">Create New</a>
+        </p>
+    }
+
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            
+                                <a asp-action="DeleteCategory" class="btn btn-danger" asp-route-id="@item.CategoryId">Delete</a>
+                                <a asp-action="EditCategory" class="btn btn-warning" asp-route-id="@item.CategoryId">Edit</a> 
+                            
+                        }
+
+                    }
+
+                    
+                    <a asp-action="DetailsCategory" class="btn btn-success" asp-route-id="@item.CategoryId">Details</a> |
+                    
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

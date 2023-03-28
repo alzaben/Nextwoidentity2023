@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Product>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+
+@if (signInManager.IsSignedIn(User))
+{
+    if (User.IsInRole("Admin"))
+    {
+        <a asp-action="CreateProduct" asp-controller="Home" class="btn btn-primary btn-sm">Create New Product</a>
+    }
+
+}
+
+<h1>Products</h1>
+<table class="table table-bordered">
+    <tr>
+        <th>@Html.DisplayNameFor(c=>c.Name)</th>
+        <th>@Html.DisplayNameFor(c=>c.Category)</th>
+
+
+
+
+        <th> opreations</th>
+    </tr>
+    @foreach (var pro in Model)
+    {
+        <tr>
+
+            <td>@pro.Name</td>
+            <td>@pro.Category!.Name</td>
+
+
+
+            <td>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        <a asp-route-id="@pro.ProductId" asp-action="EditProduct" asp-controller="Home" class="btn btn-outline-secondary">Edit</a>
+                        <a asp-route-id="@pro.ProductId" asp-action="DeleteProduct" asp-controller="Home" class="btn btn-outline-danger">Delete</a>
+                        <a asp-route-id="@pro.ProductId" asp-action="DetailsProduct" asp-controller="Home" class="btn btn-outline-info">Details</a>
+                    }
+                    else
+                    {
+                        <a asp-route-id="@pro.ProductId" asp-action="DetailsProduct" asp-controller="Home" class="btn btn-outline-info">Details</a>
+                    }
+
+
+                }
+                else
+                {
+                    <a asp-route-id="@pro.ProductId" asp-action="DetailsProduct" asp-controller="Home" class="btn btn-outline-info">Details</a>
+                }
+
+
+            </td>
+        </tr>
+
+
+    }
+
+
+</table>
